@@ -2248,7 +2248,13 @@ void clean_up_after_endstop_or_probe_move() {
     }
 
     bool set_bltouch_deployed(const bool deploy) {
-      if (deploy) _bltouch_deploy(); else _bltouch_stow();
+      if (deploy) {
+        _bltouch_deploy();
+        // Fix for 3dtouch v3.0 - Turn on SW mode between deploy and stow
+        bltouch_command(BLTOUCH_SW_MODE, BLTOUCH_DELAY);
+      } else {
+        _bltouch_stow();
+      }
       return false;
     }
 
